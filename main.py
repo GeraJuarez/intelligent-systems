@@ -22,6 +22,7 @@ def breadthFirstSearch(initialState, finalState):
 
     stateQueue = deque([])  # List of States
     explored = set()        # Set of tuples of each visited state of the puzzle
+    sizeBytesCounter = 0
 
     # Init queue
     stateQueue.append(State(initialState))
@@ -29,16 +30,17 @@ def breadthFirstSearch(initialState, finalState):
     # while queue is not empty
     while stateQueue:
         currentState = stateQueue.popleft()
+        sizeBytesCounter += sys.getsizeof(currentState)
 
         # Add an unmodified list to the set, a tuple
         explored.add(tuple(currentState.puzzle))
 
         if finalState == currentState.puzzle:
-            return currentState, explored
+            return currentState, explored, sizeBytesCounter
         
         # Create a node of the current state
         currentNode = Node(currentState.puzzle)
-        
+
         # Iterate over posible paths
         exploreNext(*currentNode.up())
         exploreNext(*currentNode.down())
@@ -53,7 +55,7 @@ def main():
     initialState = [1,2,5,3,4,0,6,7,8] # read from textfile
     goal = [0, 1, 2, 3, 4, 5, 6, 7, 8]
     
-    finalState, exploredSet = breadthFirstSearch(initialState, goal)
+    finalState, exploredSet, size = breadthFirstSearch(initialState, goal)
     
     if finalState.path != None:
         print("=" * 20)
@@ -63,9 +65,9 @@ def main():
         print("=" * 20)
         print("Running time:")
         print("=" * 20)
-        print("Used memory:")
+        print("Used memory: %d bytes" % size)
         print("=" * 20)
-        print("This are the movements to solve the puzzle")
+        print("This are the movements to solve the puzzle:")
         print("-" * 20)
 
         for move in finalState.path:
