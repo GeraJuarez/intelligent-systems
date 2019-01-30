@@ -1,6 +1,8 @@
 import sys
 
+from timeit import default_timer as timer
 from collections import deque
+
 from node import Node
 from state import State
 
@@ -55,7 +57,9 @@ def main():
     initialState = [1,2,5,3,4,0,6,7,8] # read from textfile
     goal = [0, 1, 2, 3, 4, 5, 6, 7, 8]
     
+    start = timer()
     finalState, exploredSet, size = breadthFirstSearch(initialState, goal)
+    end = timer()
     
     if finalState.path != None:
         print("=" * 20)
@@ -63,7 +67,7 @@ def main():
         print("=" * 20)
         print("Number of visited nodes: %d" % len(exploredSet))
         print("=" * 20)
-        print("Running time:")
+        print("Running time: %f" % (end - start))
         print("=" * 20)
         print("Used memory: %d bytes" % size)
         print("=" * 20)
