@@ -14,11 +14,12 @@ class Node:
     """
     def __init__(self, arr):
         self.puzzleState = arr
-        self.spaceIndex = 0         # index where the zero value is. The space of the puzzle
+        self.spaceIndex = 0             # index where the zero value is. The space of the puzzle
         for i in range(len(arr)):
             if (arr[i] == 0):
                 self.spaceIndex = i
-        self.__verticalDistance = 3 # Distance to simulate moving the space of the puzzle up or down
+        self.__verticalDistance = 3     # Distance to simulate moving the space of the puzzle up or down
+        self.__horizontalDistance = 1   # Distance to simulate moving the space of the pussle left or right
 
     def __onUpperBound(self, index):
         return index in range(0, 3)
@@ -72,7 +73,7 @@ class Node:
         if self.__onLeftBound(self.spaceIndex):
             return None, None
         else:
-            return self.__moveSpace(self.spaceIndex - 1), "LEFT"
+            return self.__moveSpace(self.spaceIndex - self.__horizontalDistance), "LEFT"
 
     def right(self):
         """Changes to a state where the space is moved to the right in the puzzle
@@ -84,7 +85,7 @@ class Node:
         if self.__onRightBound(self.spaceIndex):
             return None, None
         else:
-            return self.__moveSpace(self.spaceIndex + 1), "RIGHT"
+            return self.__moveSpace(self.spaceIndex + self.__horizontalDistance), "RIGHT"
     
 def debugMethods():
     x = Node([0, 1, 2, 3, 4, 5, 6 ,7 ,8])
