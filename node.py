@@ -46,9 +46,9 @@ class Node:
 
         """
         if self.__onUpperBound(self.spaceIndex):
-            return None  
+            return None, None
         else:
-            return self.__moveSpace(self.spaceIndex - self.__verticalDistance)
+            return self.__moveSpace(self.spaceIndex - self.__verticalDistance), "UP"
     
     def down(self):
         """Changes to a state where the space is moved downwards in the puzzle
@@ -58,9 +58,9 @@ class Node:
 
         """
         if self.__onLowerBound(self.spaceIndex):
-            return None  
+            return None, None
         else:
-            return self.__moveSpace(self.spaceIndex + self.__verticalDistance)
+            return self.__moveSpace(self.spaceIndex + self.__verticalDistance), "DOWN"
 
     def left(self):
         """Changes to a state where the space is moved to the left in the puzzle
@@ -70,9 +70,9 @@ class Node:
 
         """
         if self.__onLeftBound(self.spaceIndex):
-            return None  
+            return None, None
         else:
-            return self.__moveSpace(self.spaceIndex - 1)
+            return self.__moveSpace(self.spaceIndex - 1), "LEFT"
 
     def right(self):
         """Changes to a state where the space is moved to the right in the puzzle
@@ -82,35 +82,9 @@ class Node:
 
         """
         if self.__onRightBound(self.spaceIndex):
-            return None
+            return None, None
         else:
-            return self.__moveSpace(self.spaceIndex + 1)
-
-    def posiblePaths(self):
-        """Calculate all posible paths the puzzle can take according to the location of the space.
-
-        Return:
-            An array of arrays for each calculated path
-
-        """
-        paths = []
-        state = self.up()
-        if (state != None):
-            paths.append(state)
-        
-        state = self.down()
-        if (state != None):
-            paths.append(state)
-
-        state = self.left()
-        if (state != None):
-            paths.append(state)
-
-        state = self.right()
-        if (state != None):
-            paths.append(state)
-        
-        return paths
+            return self.__moveSpace(self.spaceIndex + 1), "RIGHT"
     
 def debugMethods():
     x = Node([0, 1, 2, 3, 4, 5, 6 ,7 ,8])
@@ -118,8 +92,6 @@ def debugMethods():
     print(x.down())
     print(x.left())
     print(x.up())
-    print("_________")
-    print(x.posiblePaths())
 
 if __name__ == "__main__":
     debugMethods()
