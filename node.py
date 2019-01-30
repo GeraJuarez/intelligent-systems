@@ -1,8 +1,17 @@
 class Node:
-    # The puzzleState atribute is the array of integers that represents the state of the puzzle
-    # [0, 1, 2
-    #  3, 4, 5
-    #  6, 7, 8]
+    """Node calculates the available paths of the state it obtains as parameter
+    [0, 1, 2
+     3, 4, 5
+     6, 7, 8]
+
+    Args:
+        arr: The array of integers that represent the positions of the puzzle.
+
+    Attributes:
+        puzzleState: The current positions of the puzzle
+        spaceIndex: the index where the zero value or space is located inside the array
+
+    """
     def __init__(self, arr):
         self.puzzleState = arr
         self.spaceIndex = 0         # index where the zero value is. The space of the puzzle
@@ -30,30 +39,60 @@ class Node:
         return newState
 
     def up(self):
+        """Changes to a state where the space is moved upwards in the puzzle
+
+        Return:
+            An array of integers that represent the next state of the puzzle
+
+        """
         if self.__onUpperBound(self.spaceIndex):
             return None  
         else:
             return self.__moveSpace(self.spaceIndex - self.__verticalDistance)
     
     def down(self):
+        """Changes to a state where the space is moved downwards in the puzzle
+
+        Return:
+            An array of integers that represent the next state of the puzzle
+
+        """
         if self.__onLowerBound(self.spaceIndex):
             return None  
         else:
             return self.__moveSpace(self.spaceIndex + self.__verticalDistance)
 
     def left(self):
+        """Changes to a state where the space is moved to the left in the puzzle
+
+        Return:
+            An array of integers that represent the next state of the puzzle
+
+        """
         if self.__onLeftBound(self.spaceIndex):
             return None  
         else:
             return self.__moveSpace(self.spaceIndex - 1)
 
     def right(self):
+        """Changes to a state where the space is moved to the right in the puzzle
+
+        Return:
+            An array of integers that represent the next state of the puzzle
+
+        """
         if self.__onRightBound(self.spaceIndex):
             return None
         else:
             return self.__moveSpace(self.spaceIndex + 1)
 
     def posiblePaths(self):
+        """Calculate all posible paths the puzzle can take according to the location of the space.
+
+        Return:
+            An array of arrays for each calculated path
+
+        """
         paths = []
         state = self.up()
         if (state != None):
