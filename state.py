@@ -6,7 +6,7 @@ class State:
 
     Attributes:
         puzzle: Human readable string describing the exception.
-        path: Yhe current path taken form the original state to the current
+        path: The current path taken form the original state to the current.
 
     """
     def __init__(self, arr):
