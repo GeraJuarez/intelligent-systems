@@ -1,9 +1,19 @@
+import sys
+
 from collections import deque
 from node import Node
 from state import State
 
 def breadthFirstSearch(initialState, finalState):
+    """Search by width algorithm"""
+
     def exploreNext(neighbor, move):
+        """Finds out if the neighbor is withinf the boundaries and explore it.
+        `explored` is the set used in the BFS function.
+        `stateQueue` is the queue inside the BFS function.
+        `currentState` is each visited node inside the loop of the BFS function.
+
+        """
         if (neighbor != None and tuple(neighbor) not in explored):
             nextState = State(neighbor)
             nextState.path = currentState.path.copy()
@@ -24,11 +34,11 @@ def breadthFirstSearch(initialState, finalState):
         explored.add(tuple(currentState.puzzle))
 
         if finalState == currentState.puzzle:
-            return currentState.path
+            return currentState, explored
         
         # Create a node of the current state
         currentNode = Node(currentState.puzzle)
-
+        
         # Iterate over posible paths
         exploreNext(*currentNode.up())
         exploreNext(*currentNode.down())
@@ -38,13 +48,27 @@ def breadthFirstSearch(initialState, finalState):
     return None
 
 def main():
-    initialState = [1, 5, 4, 2, 7, 6, 0, 3, 8]
+    #with open("hola.txt", "r") as file:
+
+    initialState = [1,2,5,3,4,0,6,7,8] # read from textfile
     goal = [0, 1, 2, 3, 4, 5, 6, 7, 8]
     
-    path = breadthFirstSearch(initialState, goal)
+    finalState, exploredSet = breadthFirstSearch(initialState, goal)
     
-    if path != None:
-        for move in path:
+    if finalState.path != None:
+        print("=" * 20)
+        print("Solution depth or cost: %d" % len(finalState.path))
+        print("=" * 20)
+        print("Number of visited nodes: %d" % len(exploredSet))
+        print("=" * 20)
+        print("Running time:")
+        print("=" * 20)
+        print("Used memory:")
+        print("=" * 20)
+        print("This are the movements to solve the puzzle")
+        print("-" * 20)
+
+        for move in finalState.path:
             print(move)
     else:
         print("It has no solution :(")
