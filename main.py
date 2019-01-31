@@ -59,6 +59,11 @@ def main(arg):
         line = file.readline()
         for val in line.split(" "):
             initialState.append(int(val))
+
+    if set(goal) != set(initialState):
+        sys.exit("ERROR: input is not valid, it must have numbers from 0 to 8")
+    elif len(goal) != len(initialState):
+        sys.exit("ERROR: invalid input, it must have nine numbers, from 0 to 8")
     
     start = timer()
     finalState, exploredSet, size = breadthFirstSearch(initialState, goal)
@@ -83,8 +88,8 @@ def main(arg):
         print("It has no solution :(")
 
 if len(sys.argv) < 2:
-    sys.exit("ERROR: The program needs the name of the file with the initial state of the puzzle as a paremeter when executing")
+    sys.exit("ERROR: The program needs the name of the file with the initial state of the puzzle as an argument when executing")
 elif len(sys.argv) > 2:
-    sys.exit("ERROR: too many parameters")
+    sys.exit("ERROR: too many arguments")
 
 main(sys.argv[1])
