@@ -69,7 +69,7 @@ def main(arg):
     finalState, exploredSet, size = breadthFirstSearch(initialState, goal)
     end = timer()
     
-    if finalState.path != None:
+    if finalState != None:
         print("=" * 20)
         print("Solution depth or cost: %d" % len(finalState.path))
         print("=" * 20)
@@ -81,9 +81,7 @@ def main(arg):
         print("=" * 20)
         print("This are the movements to solve the puzzle:")
         print("-" * 20)
-
-        for move in finalState.path:
-            print(move)
+        print(*finalState.path, sep=' => ')
     else:
         print("It has no solution :(")
 
