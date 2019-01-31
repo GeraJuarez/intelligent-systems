@@ -51,11 +51,11 @@ def breadthFirstSearch(initialState, finalState):
             
     return None
 
-def main():
+def main(arg):
     initialState = []
     goal = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 
-    with open("puzzle.txt", "r") as file:
+    with open(arg, "r") as file:
         line = file.readline()
         for val in line.split(" "):
             initialState.append(int(val))
@@ -82,4 +82,9 @@ def main():
     else:
         print("It has no solution :(")
 
-main()
+if len(sys.argv) < 2:
+    sys.exit("ERROR: The program needs the name of the file with the initial state of the puzzle as a paremeter when executing")
+elif len(sys.argv) > 2:
+    sys.exit("ERROR: too many parameters")
+
+main(sys.argv[1])
