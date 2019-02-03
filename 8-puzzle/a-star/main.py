@@ -27,7 +27,8 @@ def a_start(initialState, finalState):
         6:2, 7:2, 8:2
     }
 
-    def calculateManhattan(state):
+    # Inner helper functions
+    def manhattan_priority(state):
         priority = 0
         for i, val in enumerate(state.puzzle):
             row_dist = abs(ROW_VALS[i] - ROW_VALS[val])
@@ -36,12 +37,11 @@ def a_start(initialState, finalState):
 
         return priority
 
-    def exploreNext(neighbor_state, move_type):
+    def explore_next(neighbor_state, move_type):
         """Finds out if the neighbor_state is within the boundaries and explore it.
         `explored` is the set of States already visited.
         `heap_state` is the heap that keeps States to be visited sorted by priority.
         `state_current` the current State that is being visited.
-
         """
         if (neighbor_state != None and tuple(neighbor_state) not in explored):
             next_state = State(neighbor_state)
@@ -51,7 +51,7 @@ def a_start(initialState, finalState):
 
     # Init heap
     first = State(initialState))
-    tupState = (calculateManhattan(first), tupState)
+    tupState = (manhattan_priority(first), tupState)
     heappush(heap_state, tupState)
 
     # while heap is not empty
@@ -69,10 +69,10 @@ def a_start(initialState, finalState):
         currentNode = Node(state_current.puzzle)
 
         # Iterate over posible paths
-        exploreNext(*currentNode.up())
-        exploreNext(*currentNode.down())
-        exploreNext(*currentNode.left())
-        exploreNext(*currentNode.right())
+        explore_next(*currentNode.up())
+        explore_next(*currentNode.down())
+        explore_next(*currentNode.left())
+        explore_next(*currentNode.right())
             
     return None, None, None
 
