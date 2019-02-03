@@ -75,5 +75,8 @@ def a_star_search(initial_state, final_state):
         explore_next(*node_current.down())
         explore_next(*node_current.left())
         explore_next(*node_current.right())
+
+        print("Depth %d" % len(state_current.path))
+        print(*heap_state.queue, sep='\n')
             
     return None, None, None
