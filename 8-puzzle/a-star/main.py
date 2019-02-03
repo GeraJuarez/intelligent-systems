@@ -6,12 +6,12 @@ from timeit import default_timer as timer
 from node import Node
 from state import State
 
-def a_start(initialState, finalState):
+def a_start(initial_state, final_state):
     """Search based on heuristic, i thos case, with the Manhattan priority function"""
 
     # Init variables
-    heap_state = []
-    explored = set()
+    heap_state = []     # Heap of States
+    explored = set()    # Set of States
     size_bytes_counter = 0
 
     # Constants dictionaries for distnces inside the puzzle pieces
@@ -44,14 +44,15 @@ def a_start(initialState, finalState):
         `state_current` the current State that is being visited.
         """
         if (neighbor_state != None and tuple(neighbor_state) not in explored):
-            next_state = State(neighbor_state)
-            next_state.path = state_current.path.copy()
-            next_state.path.append(move_type)
-            heap_state.append(next_state)
+            state_next = State(neighbor_state)
+            state_next.path = state_current.path.copy()
+            state_next.path.append(move_type)
+            tup_new = (manhattan_priority(state_next), state_next)
+            heappush(heap_state, tup_new)
 
     # Init heap
-    first = State(initialState))
-    tupState = (manhattan_priority(first), tupState)
+    state_first = State(initial_state))
+    tupState = (manhattan_priority(state_first), state_first)
     heappush(heap_state, tupState)
 
     # while heap is not empty
@@ -62,17 +63,17 @@ def a_start(initialState, finalState):
         # Add an unmodified list to the set, a tuple
         explored.add(tuple(state_current.puzzle))
 
-        if finalState == state_current.puzzle:
+        if final_state == state_current.puzzle:
             return state_current, explored, size_bytes_counter
         
         # Create a node of the current state
-        currentNode = Node(state_current.puzzle)
+        node_current = Node(state_current.puzzle)
 
         # Iterate over posible paths
-        explore_next(*currentNode.up())
-        explore_next(*currentNode.down())
-        explore_next(*currentNode.left())
-        explore_next(*currentNode.right())
+        explore_next(*node_current.up())
+        explore_next(*node_current.down())
+        explore_next(*node_current.left())
+        explore_next(*node_current.right())
             
     return None, None, None
 
