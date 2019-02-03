@@ -1,5 +1,5 @@
 import sys
-import heapq
+import queue
 
 from timeit import default_timer as timer
 
@@ -10,8 +10,8 @@ def a_start(initial_state, final_state):
     """Search based on heuristic, i thos case, with the Manhattan priority function"""
 
     # Init variables
-    heap_state = []     # Heap of States
-    explored = set()    # Set of States
+    heap_state = queue.PriorityQueue()
+    explored = set()
     size_bytes_counter = 0
 
     # Constants dictionaries for distnces inside the puzzle pieces
@@ -30,34 +30,36 @@ def a_start(initial_state, final_state):
     # Inner helper functions
     def manhattan_priority(state):
         priority = 0
-        for i, val in enumerate(state.puzzle):
+        for i, val in enumerate(state):
+            if (val == 0): continue
             row_dist = abs(ROW_VALS[i] - ROW_VALS[val])
             col_dist = abs(COL_VALS[i] - COL_VALS[val])
             priority += row_dist + col_dist
 
         return priority
 
-    def explore_next(neighbor_state, move_type):
-        """Finds out if the neighbor_state is within the boundaries and explore it.
+    def explore_next(neighbor_puzzle, move_type):
+        """Finds out if the neighbor_puzzle is within the boundaries and explore it.
         `explored` is the set of States already visited.
         `heap_state` is the heap that keeps States to be visited sorted by priority.
         `state_current` the current State that is being visited.
         """
-        if (neighbor_state != None and tuple(neighbor_state) not in explored):
-            state_next = State(neighbor_state)
+        if (neighbor_puzzle != None and tuple(neighbor_puzzle) not in explored):
+            state_next = State(neighbor_puzzle)
             state_next.path = state_current.path.copy()
             state_next.path.append(move_type)
-            tup_new = (manhattan_priority(state_next), state_next)
-            heappush(heap_state, tup_new)
+            state_next = manhattan_priority(state_next.puzzle) + len(state_next.path)
+            heap_state.put(state_next)
 
-    # Init heap
-    state_first = State(initial_state))
-    tupState = (manhattan_priority(state_first), state_first)
-    heappush(heap_state, tupState)
+    # Start algorithm
+    state_first = State(initial_state)
+    state_first.g_heuristic = manhattan_priority(state_first.puzzle)
+    heap_state.put(state_first)
 
-    # while heap is not empty
-    while heap_state:
-        state_current = heappop(heap_state)
+    while not heap_state.full():
+        state_current = heap_state.get()
+        #print(state_current)
+        print(type(state_current))
         size_bytes_counter += sys.getsizeof(state_current)
 
         # Add an unmodified list to the set, a tuple
