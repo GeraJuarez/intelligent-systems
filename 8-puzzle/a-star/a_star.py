@@ -4,6 +4,32 @@ import queue
 from node import Node
 from state import State
 
+ROW_VALS = {
+    0:0, 1:1, 2:2,
+    3:0, 4:1, 5:2,
+    6:0, 7:1, 8:2
+}
+
+COL_VALS = {
+    0:0, 1:0, 2:0,
+    3:1, 4:1, 5:1,
+    6:2, 7:2, 8:2
+}
+
+def manhattan_priority(state):
+    """Calculates the Manhattan priority according to the positions of the puzzle numbers
+
+    Return the Manhattan distance from each current number position to that of the goal
+    """
+    priority = 0
+    for i, val in enumerate(state):
+        if (val == 0): continue
+        row_dist = abs(ROW_VALS[i] - ROW_VALS[val])
+        col_dist = abs(COL_VALS[i] - COL_VALS[val])
+        priority += row_dist + col_dist
+
+    return priority
+
 def a_star_search(initial_state, final_state):
     """Search based on heuristic, in this case, with the Manhattan priority function"""
 
@@ -12,30 +38,7 @@ def a_star_search(initial_state, final_state):
     explored = set()
     size_bytes_counter = 0
 
-    # Constants dictionaries for distnces inside the puzzle pieces
-    ROW_VALS = {
-        0:0, 1:1, 2:2,
-        3:0, 4:1, 5:2,
-        6:0, 7:1, 8:2
-    }
-
-    COL_VALS = {
-        0:0, 1:0, 2:0,
-        3:1, 4:1, 5:1,
-        6:2, 7:2, 8:2
-    }
-
-    # Inner helper functions
-    def manhattan_priority(state):
-        priority = 0
-        for i, val in enumerate(state):
-            if (val == 0): continue
-            row_dist = abs(ROW_VALS[i] - ROW_VALS[val])
-            col_dist = abs(COL_VALS[i] - COL_VALS[val])
-            priority += row_dist + col_dist
-
-        return priority
-
+    # Inner helper function
     def explore_next(neighbor_puzzle, move_type):
         """Finds out if the neighbor_puzzle is within the boundaries and explore it.
         `explored` is the set of States already visited.
