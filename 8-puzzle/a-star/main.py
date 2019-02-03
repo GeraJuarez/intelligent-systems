@@ -48,12 +48,12 @@ def a_start(initial_state, final_state):
             state_next = State(neighbor_puzzle)
             state_next.path = state_current.path.copy()
             state_next.path.append(move_type)
-            state_next.g_heuristic = manhattan_priority(state_next.puzzle) + len(state_next.path)
+            state_next.f_heuristic = manhattan_priority(state_next.puzzle) + len(state_next.path)
             heap_state.put(state_next)
 
     # Start algorithm
     state_first = State(initial_state)
-    state_first.g_heuristic = manhattan_priority(state_first.puzzle)
+    state_first.f_heuristic = manhattan_priority(state_first.puzzle)
     heap_state.put(state_first)
 
     while not heap_state.full():

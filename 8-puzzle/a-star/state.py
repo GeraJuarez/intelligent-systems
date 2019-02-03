@@ -12,11 +12,11 @@ class State:
     def __init__(self, arr):
         self.puzzle = arr
         self.path = []
-        self.g_heuristic = 0
+        self.f_heuristic = 0
 
     def __str__(self):
-        return str(self.puzzle) + " : " + str(self.g_heuristic)
+        return str(self.puzzle) + " : " + str(self.f_heuristic)
 
     def __lt__(self, other):
-        return self.g_heuristic < other.g_heuristic
+        return self.f_heuristic < other.f_heuristic
 
