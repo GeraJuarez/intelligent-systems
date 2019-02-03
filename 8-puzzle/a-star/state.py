@@ -15,7 +15,7 @@ class State:
         self.f_heuristic = 0
 
     def __str__(self):
-        return str(self.puzzle) + " : " + str(self.f_heuristic)
+        return "f(n): " + str(self.f_heuristic) + " => " + str(self.puzzle)
 
     def __lt__(self, other):
         return self.f_heuristic < other.f_heuristic

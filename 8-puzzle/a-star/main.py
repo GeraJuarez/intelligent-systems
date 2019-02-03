@@ -9,7 +9,7 @@ def main(arg):
 
     with open(arg, "r") as file:
         line = file.readline()
-        for val in line.split(","):
+        for val in line.split(" "):
             initial_state.append(int(val))
 
     if set(goal) != set(initial_state):
