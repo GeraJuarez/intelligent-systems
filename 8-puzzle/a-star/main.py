@@ -1,37 +1,62 @@
 import sys
+import heapq
 
 from timeit import default_timer as timer
-from collections import deque
 
 from node import Node
 from state import State
 
-def breadthFirstSearch(initialState, finalState):
-    """Search by width algorithm"""
+def a_start(initialState, finalState):
+    """Search based on heuristic, i thos case, with the Manhattan priority function"""
 
-    def exploreNext(neighbor, move):
-        """Finds out if the neighbor is within the boundaries and explore it.
+    # Init variables
+    stateHeap = []
+    explored = set()
+    sizeBytesCounter = 0
+
+    # Constants dictionaries for distnces inside the puzzle pieces
+    ROW_VALS = {
+        0:0, 1:1, 2:2,
+        3:0, 4:1, 5:2,
+        6:0, 7:1, 8:2
+    }
+
+    COL_VALS = {
+        0:0, 1:0, 2:0,
+        3:1, 4:1, 5:1,
+        6:2, 7:2, 8:2
+    }
+
+    def calculateManhattan(state):
+        priority = 0
+        for i, val in enumerate(state.puzzle):
+            rowDist = abs(ROW_VALS[i] - ROW_VALS[val])
+            colDist = abs(COL_VALS[i] - COL_VALS[val])
+            priority += rowDist + colDist
+
+        return priority
+
+    def exploreNext(neighbor_state, move_type):
+        """Finds out if the neighbor_state is within the boundaries and explore it.
         `explored` is the set used in the BFS function.
         `stateQueue` is the queue inside the BFS function.
         `currentState` is each visited node inside the loop of the BFS function.
 
         """
-        if (neighbor != None and tuple(neighbor) not in explored):
-            nextState = State(neighbor)
+        if (neighbor_state != None and tuple(neighbor_state) not in explored):
+            nextState = State(neighbor_state)
             nextState.path = currentState.path.copy()
-            nextState.path.append(move)
+            nextState.path.append(move_type)
             stateQueue.append(nextState)
 
-    stateQueue = deque([])  # List of States
-    explored = set()        # Set of tuples of each visited state of the puzzle
-    sizeBytesCounter = 0
+    # Init heap
+    first = State(initialState))
+    tupState = (calculateManhattan(first), tupState)
+    heappush(stateHeap, tupState)
 
-    # Init queue
-    stateQueue.append(State(initialState))
-
-    # while queue is not empty
-    while stateQueue:
-        currentState = stateQueue.popleft()
+    # while heap is not empty
+    while stateHeap:
+        currentState = heappop(stateHeap)
         sizeBytesCounter += sys.getsizeof(currentState)
 
         # Add an unmodified list to the set, a tuple
@@ -49,7 +74,7 @@ def breadthFirstSearch(initialState, finalState):
         exploreNext(*currentNode.left())
         exploreNext(*currentNode.right())
             
-    return None
+    return None, None, None
 
 def main(arg):
     initialState = []
@@ -66,7 +91,7 @@ def main(arg):
         sys.exit("ERROR: invalid input, it must have nine numbers, from 0 to 8")
     
     start = timer()
-    finalState, exploredSet, size = breadthFirstSearch(initialState, goal)
+    finalState, exploredSet, size = a_start(initialState, goal)
     end = timer()
     
     if finalState != None:
