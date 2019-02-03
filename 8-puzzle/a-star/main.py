@@ -10,9 +10,9 @@ def a_start(initialState, finalState):
     """Search based on heuristic, i thos case, with the Manhattan priority function"""
 
     # Init variables
-    stateHeap = []
+    heap_state = []
     explored = set()
-    sizeBytesCounter = 0
+    size_bytes_counter = 0
 
     # Constants dictionaries for distnces inside the puzzle pieces
     ROW_VALS = {
@@ -30,43 +30,43 @@ def a_start(initialState, finalState):
     def calculateManhattan(state):
         priority = 0
         for i, val in enumerate(state.puzzle):
-            rowDist = abs(ROW_VALS[i] - ROW_VALS[val])
-            colDist = abs(COL_VALS[i] - COL_VALS[val])
-            priority += rowDist + colDist
+            row_dist = abs(ROW_VALS[i] - ROW_VALS[val])
+            col_dist = abs(COL_VALS[i] - COL_VALS[val])
+            priority += row_dist + col_dist
 
         return priority
 
     def exploreNext(neighbor_state, move_type):
         """Finds out if the neighbor_state is within the boundaries and explore it.
-        `explored` is the set used in the BFS function.
-        `stateQueue` is the queue inside the BFS function.
-        `currentState` is each visited node inside the loop of the BFS function.
+        `explored` is the set of States already visited.
+        `heap_state` is the heap that keeps States to be visited sorted by priority.
+        `state_current` the current State that is being visited.
 
         """
         if (neighbor_state != None and tuple(neighbor_state) not in explored):
-            nextState = State(neighbor_state)
-            nextState.path = currentState.path.copy()
-            nextState.path.append(move_type)
-            stateQueue.append(nextState)
+            next_state = State(neighbor_state)
+            next_state.path = state_current.path.copy()
+            next_state.path.append(move_type)
+            heap_state.append(next_state)
 
     # Init heap
     first = State(initialState))
     tupState = (calculateManhattan(first), tupState)
-    heappush(stateHeap, tupState)
+    heappush(heap_state, tupState)
 
     # while heap is not empty
-    while stateHeap:
-        currentState = heappop(stateHeap)
-        sizeBytesCounter += sys.getsizeof(currentState)
+    while heap_state:
+        state_current = heappop(heap_state)
+        size_bytes_counter += sys.getsizeof(state_current)
 
         # Add an unmodified list to the set, a tuple
-        explored.add(tuple(currentState.puzzle))
+        explored.add(tuple(state_current.puzzle))
 
-        if finalState == currentState.puzzle:
-            return currentState, explored, sizeBytesCounter
+        if finalState == state_current.puzzle:
+            return state_current, explored, size_bytes_counter
         
         # Create a node of the current state
-        currentNode = Node(currentState.puzzle)
+        currentNode = Node(state_current.puzzle)
 
         # Iterate over posible paths
         exploreNext(*currentNode.up())
